@@ -5,11 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "asdfs": "/Users/andrewwatters/bin/sonarqube-7.7/bin/macosx-universal-64/sonar.sh console",
-    "asdf": "node server.js",
     "server": "node server.js",
-    "sonar": "cd && bin/sonarqube-7.7/bin/macosx-universal-64/sonar.sh console",
-    "start": "concurrently \"node server.js\" \"cd && bin/sonarqube-7.7/bin/macosx-universal-64/sonar.sh console\" "
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",

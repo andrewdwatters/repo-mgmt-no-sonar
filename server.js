@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cloneCtrl = require('./controllers/cloneCtrl');
 
 const app = express();
-const port = process.env.SERVER_PORT;
+const port = 4001;
 
 app.use(bodyParser.json());
 

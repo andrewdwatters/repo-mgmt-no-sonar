@@ -50,7 +50,7 @@ module.exports = {
             }
             results.push({
               name: names[i],
-              operationSuccessful: outcome
+              operationSuccessful: outcome || true
             });
           }
           res.status(200).send([
