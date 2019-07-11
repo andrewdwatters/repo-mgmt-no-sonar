@@ -21,7 +21,7 @@ module.exports = {
     try {
       db.ref("/cohorts/" + cohort)
         .once("value")
-        .then(snap => {
+        .then(async snap => {
           let { names, githubAccounts } = snap.val();
           names = names.map(name => name.split(" ").join(""));
           const results = [];
@@ -34,14 +34,14 @@ module.exports = {
             const finalOutputDir = `${outputDir}/${names[i]}/${repo}`;
             let outcome;
             if (sourceIsGithubClassroom) {
-              outcome = initChildProcess(
+              outcome = await initChildProcess(
                 `git clone https://github.com/TechtonicAcademy/${repo}-${
                   githubAccounts[i]
                 }.git ${finalOutputDir}`,
                 res
               );
             } else {
-              outcome = initChildProcess(
+              outcome = await initChildProcess(
                 `git clone https://github.com/${
                   githubAccounts[i]
                 }/${repo}.git ${finalOutputDir}`,
@@ -50,7 +50,7 @@ module.exports = {
             }
             results.push({
               name: names[i],
-              operationSuccessful: outcome || true
+              operationSuccessful: outcome
             });
           }
           res.status(200).send([
@@ -85,22 +85,20 @@ const createApprenticeDirectory = (absPath, res) => {
     if (err) {
       res.status(500).send("Error creating apprentice directory");
       return false;
-    }
-    else {
+    } else {
       console.log(`Output directory exists at ${absPath}`);
       return true;
     }
   });
 };
 
-const initChildProcess = (cmd, res) => {
+// returns true if op succeeded, false otherwise
+const initChildProcess = async (cmd) => { 
   try {
-    execSync(cmd, err => {
-      if (!err) console.log(`Successfully cloned repository`);
-      return true;
-    });
+    return !!await execSync(cmd, (err, stdout) => {
+      if(!err) return true;
+    }).toJSON().data
   } catch (err) {
-    console.log("Error cloning one or more repositories");
     return false;
   }
 };
